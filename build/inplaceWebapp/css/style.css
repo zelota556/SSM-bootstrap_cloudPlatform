@@ -1,0 +1,79 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+/* 左侧图片 */
+.sign-bgleft {
+    background: url(../img/tree.png)no-repeat;
+    height: 968px;
+}
+
+/* 右侧 */
+.sign-content {
+    max-width:620px;
+    margin: 0 ;
+    padding:210px 0px;
+    margin-left: 70px;
+}
+/* 登录标题 */
+.sign-content h2{
+    color: #202e42;
+    font-size: 30px;
+    text-align: center;
+    margin-bottom: 60px;
+}
+/* 账号密码label */
+.signin-form label{
+    color: #627183;
+    font-size:16px;
+    font-weight: 500;
+    margin-bottom: 15px;
+}
+/* 账号密码input */
+.form-control {
+	font-size: 16px;
+    border: 1px solid #b0b9c7;
+    border-radius: 5px;
+    height: 46px;
+}
+/* 记住密码 */
+.password-checkbox + label,.checkbox-list a {
+    cursor: pointer;
+    color: #90959e;
+    font-size: 17px;
+    font-weight: 500;
+}
+.list li {
+    display: inline-block;
+    margin: 20px 0;
+}
+.list{
+	width: 620px;
+	margin: auto;
+}
+.list li:last-child {
+    float: right;
+}
+.password-checkbox{
+	width: 15px;
+	height: 15px;
+}
+/* 登录按钮 */
+.btn.signin_btn {
+    width: 620px;
+    height: 60px;
+    background: #26d9b3;
+    color: #fff;
+    font-size: 18px;
+    border-radius: 3px;
+    box-shadow: 0 5px 30px rgba(60,191,163,.3);
+    margin-top: 10px;
+}
+.signin-footer p{
+    color: #a1a5ad;
+    font-size:16px;
+    max-width: 265px;
+    margin: 34px auto;
+
+}
+

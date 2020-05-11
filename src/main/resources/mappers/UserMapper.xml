@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zelot.dao.UserDao">
+  <resultMap id="BaseResultMap" type="com.zelot.ModelDo.User">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="usr_name" jdbcType="VARCHAR" property="userName" />
+    <result column="usr_password" jdbcType="VARCHAR" property="userPassword" />
+    <result column="usr_gender" jdbcType="BOOLEAN" property="userGender" />
+    <result column="usr_age" jdbcType="INTEGER" property="userAge" />
+    <result column="usr_birthday" jdbcType="DATE" property="userBirthday" />
+    <result column="usr_email" jdbcType="VARCHAR" property="userEmail" />
+    <result column="usr_phone" jdbcType="VARCHAR" property="userPhone" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, usr_name, usr_password, usr_gender, usr_age, usr_birthday, usr_email, usr_phone
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from user_manager
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectAll" resultMap="BaseResultMap">
+      select id,usr_name,usr_password,usr_gender,usr_age,usr_birthday,usr_email,usr_phone
+      from user_manager
+   </select>
+
+  <select id="selectByLimit" resultMap="BaseResultMap">
+      select id,usr_name,usr_password,usr_gender,usr_age,usr_birthday,usr_email,usr_phone
+      from user_manager #{offset},#{limit}
+   </select>
+
+  <select id="selectByNameAndPassword" resultMap="BaseResultMap" parameterType="map">
+    select
+    <include refid="Base_Column_List" />
+    from user_manager
+    where usr_name = #{userName,jdbcType=VARCHAR}
+    and usr_password = #{password,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from user_manager
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.zelot.ModelDo.User" useGeneratedKeys="true">
+    insert into user_manager (usr_name, usr_password, usr_gender, 
+      usr_age, usr_birthday, usr_email, 
+      usr_phone)
+    values (#{userName,jdbcType=VARCHAR}, #{userPassword,jdbcType=VARCHAR}, #{userGender,jdbcType=BOOLEAN},
+      #{userAge,jdbcType=INTEGER}, #{userBirthday,jdbcType=DATE}, #{userEmail,jdbcType=VARCHAR},
+      #{userPhone,jdbcType=VARCHAR})
+  </insert>
+
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.zelot.ModelDo.User" useGeneratedKeys="true">
+    insert into user_manager
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userName != null">
+        usr_name,
+      </if>
+      <if test="userPassword != null">
+        usr_password,
+      </if>
+      <if test="userGender != null">
+        usr_gender,
+      </if>
+      <if test="userAge != null">
+        usr_age,
+      </if>
+      <if test="userBirthday != null">
+        usr_birthday,
+      </if>
+      <if test="userEmail != null">
+        usr_email,
+      </if>
+      <if test="userPhone != null">
+        usr_phone,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userPassword != null">
+        #{userPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="userGender != null">
+        #{userGender,jdbcType=BOOLEAN},
+      </if>
+      <if test="userAge != null">
+        #{userAge,jdbcType=INTEGER},
+      </if>
+      <if test="userBirthday != null">
+        #{userBirthday,jdbcType=DATE},
+      </if>
+      <if test="userEmail != null">
+        #{userEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="userPhone != null">
+        #{userPhone,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.zelot.ModelDo.User">
+    update user_manager
+    <set>
+      <if test="userName != null">
+      usr_name = #{userName,jdbcType=VARCHAR},
+    </if>
+      <if test="userPassword != null">
+        usr_password = #{userPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="userGender != null">
+        usr_gender = #{userGender,jdbcType=BOOLEAN},
+      </if>
+      <if test="userAge != null">
+        usr_age = #{userAge,jdbcType=INTEGER},
+      </if>
+      <if test="userBirthday != null">
+        usr_birthday = #{userBirthday,jdbcType=DATE},
+      </if>
+      <if test="userEmail != null">
+        usr_email = #{userEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="userPhone != null">
+        usr_phone = #{userPhone,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.zelot.ModelDo.User">
+    update user_manager
+    set usr_name = #{userName,jdbcType=VARCHAR},
+      usr_password = #{userPassword,jdbcType=VARCHAR},
+      usr_gender = #{userGender,jdbcType=BOOLEAN},
+      usr_age = #{userAge,jdbcType=INTEGER},
+      usr_birthday = #{userBirthday,jdbcType=DATE},
+      usr_email = #{userEmail,jdbcType=VARCHAR},
+      usr_phone = #{userPhone,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+</mapper>

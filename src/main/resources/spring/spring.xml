@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context-4.0.xsd
+            http://www.springframework.org/schema/tx
+            http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+            http://www.springframework.org/schema/util
+            http://www.springframework.org/schema/util/spring-util-4.0.xsd">
+
+    <!-- dao层配置 -->
+    <!-- read jdbc.properties -->
+    <bean id="propertyConfig" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:jdbc.properties</value>
+                <value>classpath:mqtt.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <!--
+    c3p0 和 ali druid区别：
+    c3p0是一个开放源代码的JDBC连接池，它实现了数据源和JNDI绑定，包括了实现jdbc3和jdbc2扩展规范说明的Connection 和Statement池
+    的DataSources 对象。目前使用它的开源项目有Hibernate，Spring等
+    druid不仅仅是一个数据库连接池，它还包含一个ProxyDriver，一系列内置的JDBC组件库，一个 SQL Parser。支持所有JDBC兼容的数据库，
+    包括Oracle、MySql、Derby、Postgresql、SQL Server、H2等等。Druid针对Oracle和MySql做了特别优化，比如Oracle的PS  Cache内存占用优化，
+    MySql的ping检测优化。Druid提供了MySql、Oracle、Postgresql、SQL-92的SQL的完整支持，这是一个手写的高性能SQL Parser，支持Visitor模式，
+    使得分析SQL的抽象语法树很方便。简单SQL语句用时10微秒以内，复杂SQL用时30微秒。通过Druid提供的SQL Parser可以在JDBC层拦截SQL做相应处理，
+    比如说分库分表、审计等。Druid防御SQL注入攻击的WallFilter就是通过Druid的SQL Parser分析语义实现的
+    -->
+    <!-- 配置c3p0数据源连接池 -->
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" >
+        <!-- 配置数据库连接基础信息 -->
+        <property name="driverClass" value="${jdbc.driverClassName}"/>
+        <property name="jdbcUrl" value="${jdbc.url}" />
+        <property name="user" value="${jdbc.user}" />
+        <property name="password" value="${jdbc.password}" />
+        <!-- 配置init、max、min -->
+        <property name="initialPoolSize" value="5"/>
+        <property name="minPoolSize" value="2"/>
+        <property name="maxPoolSize" value="10"/>
+    </bean>
+
+    <!-- 2.创建jdbcTemplate对象，并注入连接池对象 -->
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!-- 配置mybatis工厂  -->
+    <bean id= "sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!--1.4.1 注入数据源-->
+        <property name="dataSource" ref="dataSource"/>
+        <!--1.4.2 注入mybatis的配置文件-->
+        <property name="configLocation" value="classpath:mybatis/mybatis-config.xml"/>
+        <property name="mapperLocations" value="classpath:mappers/*.xml"/>
+    </bean>
+
+    <!-- 自动扫描方式创建 mapper bean -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+        <property name="basePackage" value="com.zelot.dao"/>
+    </bean>
+
+    <!-- 批量sqlSession-->
+    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"/>
+        <constructor-arg name="executorType" value="BATCH"/>
+    </bean>
+
+    <!-- service层配置 -->
+    <context:component-scan base-package="com.zelot.service" />
+    <!-- 事物管理配置 -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <!-- 使用注解定义事务 -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+</beans>

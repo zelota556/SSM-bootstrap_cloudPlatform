@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zelot.dao.DeviceDao">
+  <resultMap id="BaseResultMap" type="com.zelot.ModelDo.Device">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="dev_no" jdbcType="VARCHAR" property="devNo" />
+    <result column="dev_name" jdbcType="VARCHAR" property="devName" />
+    <result column="dev_buydate" jdbcType="DATE" property="devBuydate" />
+    <result column="dev_warrantydate" jdbcType="DATE" property="devWarrantydate" />
+    <result column="dev_status" jdbcType="BOOLEAN" property="devStatus" />
+    <result column="date_create" jdbcType="TIMESTAMP" property="dateCreate" />
+    <result column="dev_repairdate" jdbcType="DATE" property="devRepairdate" />
+    <result column="date_update" jdbcType="TIMESTAMP" property="dateUpdate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, dev_no, dev_name, dev_buydate, dev_warrantydate, dev_status, date_create, dev_repairdate, 
+    date_update
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from dev_manager
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id,dev_no,dev_name,dev_buydate,dev_warrantydate,dev_status,date_create,dev_repairdate,date_update
+    from dev_manager
+  </select>
+
+  <select id="selectByLimit" resultMap="BaseResultMap">
+    select id,dev_no,dev_name,dev_buydate,dev_warrantydate,dev_status,date_create,dev_repairdate,date_update
+    from dev_manager limit #{offset},#{limit}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from dev_manager
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.zelot.ModelDo.Device" useGeneratedKeys="true">
+    insert into dev_manager (dev_no, dev_name, dev_buydate, 
+      dev_warrantydate, dev_status, date_create, 
+      dev_repairdate, date_update)
+    values (#{devNo,jdbcType=VARCHAR}, #{devName,jdbcType=VARCHAR}, #{devBuydate,jdbcType=DATE},
+      #{devWarrantydate,jdbcType=DATE}, #{devStatus,jdbcType=BOOLEAN}, #{dateCreate,jdbcType=TIMESTAMP},
+      #{devRepairdate,jdbcType=DATE}, #{dateUpdate,jdbcType=TIMESTAMP})
+  </insert>
+
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.zelot.ModelDo.Device" useGeneratedKeys="true">
+    insert into dev_manager
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="devNo != null">
+        dev_no,
+      </if>
+      <if test="devName != null">
+        dev_name,
+      </if>
+      <if test="devBuydate != null">
+        dev_buydate,
+      </if>
+      <if test="devWarrantydate != null">
+        dev_warrantydate,
+      </if>
+      <if test="devStatus != null">
+        dev_status,
+      </if>
+      <if test="dateCreate != null">
+        date_create,
+      </if>
+      <if test="devRepairdate != null">
+        dev_repairdate,
+      </if>
+      <if test="dateUpdate != null">
+        date_update,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="devNo != null">
+        #{devNo,jdbcType=VARCHAR},
+      </if>
+      <if test="devName != null">
+        #{devName,jdbcType=VARCHAR},
+      </if>
+      <if test="devBuydate != null">
+        #{devBuydate,jdbcType=DATE},
+      </if>
+      <if test="devWarrantydate != null">
+        #{devWarrantydate,jdbcType=DATE},
+      </if>
+      <if test="devStatus != null">
+        #{devStatus,jdbcType=BOOLEAN},
+      </if>
+      <if test="dateCreate != null">
+        #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="devRepairdate != null">
+        #{devRepairdate,jdbcType=DATE},
+      </if>
+      <if test="dateUpdate != null">
+        #{dateUpdate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.zelot.ModelDo.Device">
+    update dev_manager
+    <set>
+      <if test="devNo != null">
+        dev_no = #{devNo,jdbcType=VARCHAR},
+      </if>
+      <if test="devName != null">
+        dev_name = #{devName,jdbcType=VARCHAR},
+      </if>
+      <if test="devBuydate != null">
+        dev_buydate = #{devBuydate,jdbcType=DATE},
+      </if>
+      <if test="devWarrantydate != null">
+        dev_warrantydate = #{devWarrantydate,jdbcType=DATE},
+      </if>
+      <if test="devStatus != null">
+        dev_status = #{devStatus,jdbcType=BOOLEAN},
+      </if>
+      <if test="dateCreate != null">
+        date_create = #{dateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="devRepairdate != null">
+        dev_repairdate = #{devRepairdate,jdbcType=DATE},
+      </if>
+      <if test="dateUpdate != null">
+        date_update = #{dateUpdate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.zelot.ModelDo.Device">
+    update dev_manager
+    set dev_no = #{devNo,jdbcType=VARCHAR},
+      dev_name = #{devName,jdbcType=VARCHAR},
+      dev_buydate = #{devBuydate,jdbcType=DATE},
+      dev_warrantydate = #{devWarrantydate,jdbcType=DATE},
+      dev_status = #{devStatus,jdbcType=BOOLEAN},
+      date_create = #{dateCreate,jdbcType=TIMESTAMP},
+      dev_repairdate = #{devRepairdate,jdbcType=DATE},
+      date_update = #{dateUpdate,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+</mapper>
